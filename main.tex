@@ -1,0 +1,462 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Jacobs Landscape Poster
+% LaTeX Template
+% Version 1.0 (29/03/13)
+%
+% Created by:
+% Computational Physics and Biophysics Group, Jacobs University
+% https://teamwork.jacobs-university.de:8443/confluence/display/CoPandBiG/LaTeX+Poster
+%
+% Further modified by:
+% Nathaniel Johnston (nathaniel@njohnston.ca)
+%
+% This template has been downloaded from:x
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[final]{beamer}
+
+\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+\usepackage{xspace}
+\usepackage[numbers]{natbib}
+\usepackage{mdframed}
+\usepackage{dashbox}
+\usepackage[n,advantage,operators,sets,adversary,landau,probability,notions,logic,ff, mm, primitives,events,complexity,asymptotics,keys]{cryptocode}
+\usepackage{multirow}
+\usetheme{confposter} % Use the confposter theme supplied with this template
+
+\usepackage{amsthm}
+\makeatletter
+\def\th@plain{%
+  \thm@notefont{}% same as heading font
+  \itshape % body font
+}
+\def\th@definition{%
+  \thm@notefont{}% same as heading font
+  \normalfont % body font
+}
+\makeatother
+% \newtheorem{theorem}{Theorem}
+\theoremstyle{definition}
+\newtheorem{definition2}{Definition}
+
+
+\setbeamercolor{block title}{fg=ngreen,bg=white} % Colors of the block titles
+\setbeamercolor{block body}{fg=black,bg=white} % Colors of the body of blocks
+\setbeamercolor{block alerted title}{fg=white,bg=dblue!70} % Colors of the highlighted block titles
+\setbeamercolor{block alerted body}{fg=black,bg=dblue!10} % Colors of the body of highlighted blocks
+% Many more colors are available for use in beamerthemeconfposter.sty
+
+\newcommand{\TapCom}{\textsf{TapCom}}
+\newcommand{\TapOpen}{\textsf{TapOpen}}
+\newcommand{\com}{\textsf{com}_{pk}}
+\newcommand{\open}{\textsf{open}}
+\newcommand{\G}{\mathbb{G}}
+\newcommand{\Goracle}{\mathcal{G}}
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\rpp}{\textsf{RPP}}
+\newcommand{\rpsp}{\textsf{RPSP}}
+\newcommand{\sampleqg}{\{1,2,\dots,q_G\}}
+\newcommand{\sampleqh}{\{1,2,\dots,q_H\}}
+\newcommand{\TF}{\textsf{TF}}
+\renewcommand{\check}[1]{ \exists(\cdot, a_i,b_i) \in \L \mid a_i + b_i#1 = a_3 + b_3#1 }
+\newcommand{\Hagg}{H_{\textsf{agg}}}
+\newcommand{\MuSig}{\textsf{MuSig}}
+\newcommand{\hagg}{h_{\textsf{agg}}}
+\newcommand{\MCT}{\textsf{MCT}}
+\newcommand{\MCTTWO}{\textsf{MSCT}}
+\newcommand{\COPCR}{\textsf{COPC}}
+
+%-----------------------------------------------------------
+% Define the column widths and overall poster size
+% To set effective sepwid, onecolwid and onecolwid values, first choose how many columns you want and how much separation you want between columns
+% In this template, the separation width chosen is 0.024 of the paper width and a 4-column layout
+% onecolwid should therefore be (1-(# of columns+1)*sepwid)/# of columns e.g. (1-(4+1)*0.024)/4 = 0.22
+% Set onecolwid to be (2*onecolwid)+sepwid = 0.464
+% Set onecolwid to be (3*onecolwid)+2*sepwid = 0.708
+
+\newlength{\sepwid}
+\newlength{\onecolwid}
+\newlength{\twocolwid}
+\setlength{\paperwidth}{48in} % A0 width: 46.8in
+\setlength{\paperheight}{36in} % A0 height: 33.1in
+\setlength{\sepwid}{0.01\paperwidth} % Separation width (white space) between columns
+\setlength{\twocolwid}{0.63\paperwidth}
+\setlength{\onecolwid}{0.31\paperwidth} % Width of one column
+\setlength{\topmargin}{-0.5in} % Reduce the top margin size
+%-----------------------------------------------------------
+
+\usepackage{graphicx}  % Required for including images
+\usepackage{booktabs} % Top and bottom rules for tables
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{Taproot in the Generic Group Model} % Poster title
+
+\author{Lloyd Fournier  } % Author(s)
+%\author{Lloyd Fournier  (\href{mailto:loyd@coblox.tech}{lloyd@coblox.tech}) } % Author(s)
+
+\institute{\href{mailto:loyd@coblox.tech}{lloyd.fourn@gmail.com}} % Institution(s)
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+\addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
+\addtobeamertemplate{block alerted end}{}{\vspace*{2ex}} % White space under highlighted (alert) blocks
+
+\setlength{\belowcaptionskip}{2ex} % White space under figures
+\setlength\belowdisplayshortskip{2ex} % White space under equations
+
+\begin{frame}[t] % The whole poster is enclosed in one beamer frame
+
+\begin{columns}[t] % The whole poster consists of three major columns, the second of which is split into two columns twice - the [t] option aligns each column's content to the top
+
+% Mention Coin tossing would fix everything
+% Mention that proofs can be modified to work for G or X_1
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\begin{column}{\onecolwid}\vspace{-1.3cm}
+
+\begin{block}{Introduction}
+
+BIP-340 (Schnorr) and BIP-341 (Taproot) are proposed upgrades to the Bitcoin network that create a new type of public key output which can be spent by (i) a Schnorr signature under that public key or (ii) revealing a hidden commitment to a script \emph{inside} the public key and satisfying the conditions of the script. Framed as a hybrid commitment scheme:
+\begin{mdframed}
+\begin{pchstack}[center]
+\procedure{$\TapCom(G, m)$}{
+    \\[-0.7\baselineskip]
+    x \sample \ZZ_q; X \gets xG \\
+    y \gets H(f(X) || m); Y \gets yG \\
+    \com \gets X + Y \\
+    \open := (X,m) \\
+    sk \gets x + y \\
+    \pcreturn (sk, (\com, \open))
+}
+\pchspace
+\procedure{$\TapOpen(G, \com, \open)$}{
+    \\[-0.7\baselineskip]
+    (X,m) := \open \\
+    \pcif X + H(f(X) || m)G = \com  \\
+    \t \pcreturn m \\
+    \pcelse \pcreturn \bot \\
+}
+\end{pchstack}
+\end{mdframed}
+
+If the hash function $H$ is idealised as a random oracle then the scheme is secure\cite{poelstra-taproot}. Taking inspiration from \cite{schnorr-ggm}, we instead idealise the elliptic curve group in the \emph{Generic Group Model} to isolate what properties the hash function requires for Taproot to be secure. To compute new group elements the adversary is allowed up to $q_G$ queries to the oracle $\Goracle$ with two elements it already knows ($G_1,G_2$). The oracle returns a new group element $G_3$ representing $G_1 - G_2$.
+
+\textbf{The main hash function properties we consider are:}
+
+\begin{itemize}
+    \item Random-Prefix Preimage Resistance (\rpp): Strictly weaker assumption than collision resistance. Already required for Schnorr\cite{schnorr-ggm}.
+    \item Chosen Offset Prefix Collision Resistance (\COPCR): New assumption for Taproot's binding as commitment scheme. Breaking seems unrelated to collision resistance.
+\end{itemize}
+
+\begin{mdframed}
+\begin{pchstack}[center]
+\procedure{\rpp}{
+    \\[-0.7\baselineskip]
+    (\st,h) \sample \adv \\
+    P \sample \mathcal{P} \\
+    m^* \sample \adv(\st,P) \\
+    \pcreturn H(P \Vert m^*) = h
+}
+\pchspace
+\pchspace
+\procedure{\COPCR}{
+    \\[-0.7\baselineskip]
+    P_1 \sample \mathcal{P} \\
+    (\st,\delta) \sample \adv(P_1) \\
+    P_2 \sample \mathcal{P} \\
+    (m_1,m_2) \sample \adv(\st,P_2) \\
+    \pcreturn  H(P_1 \Vert m_1) -  H(P_2 \Vert m_2) =  \delta
+}
+\end{pchstack}
+\end{mdframed}
+\end{block}
+
+%\end{block}
+
+%------------------------------------------------
+\begin{block}{Forging an Opening}
+\textbf{Can an adversary forge a fake opening on someone else's coins?} Call this the \emph{Taproot Forge} problem (\TF). $\rpp$ is necessary for $\TF$ to be hard:
+
+  \begin{mdframed}
+  \begin{pchstack}[center]
+  \procedure{$\TF$}{
+       \\[-0.7\baselineskip]
+        (\st,m_1) \sample \adv \\
+        G \sample \G \\
+        (\cdot, (\com, \open)) \sample \TapCom(G, m) \\
+        (X^*,m_2) \sample \adv(st, G, \com, \open) \\
+        \pcreturn X^* + H(f(X^*) \Vert m_2)G = \com \\
+        \t \t \t \t \land m_2 \neq m_1
+      }
+  \pchspace
+   \procedure{$\R: \TF \rightarrow \rpp$}{
+   \\[-0.7\baselineskip]
+    \begin{subprocedure}
+        \dbox{ \procedure{}{
+            \< \sendmessageright*{m_1} \< Challenger \\
+            \< \sendmessageleft*{G, \com, \open} \<
+          }}
+    \end{subprocedure} \\
+    (h, \st) \sample \adv_{\rpp}; T := \com \\
+    C \gets T - hG; P \gets f(C) \\
+    m_2 \sample \adv_{\rpp}(\st, P) \\
+    \pcreturn (C,m_2)
+   }
+  \end{pchstack}
+  \end{mdframed}
+
+To show $\rpp$ is sufficient, $\R$ guesses which query to $\Goracle$ will be used for the malicious \emph{Taproot internal key}, $C$.
+
+\end{block}
+
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End of the first column
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+\begin{column}{\twocolwid}
+\begin{columns}[t,totalwidth=\twocolwid]
+
+\begin{column}{\onecolwid}\vspace{-.66in}
+\begin{mdframed}
+
+ \begin{pchstack}[center]
+  \procedure{$\R:  \rpp \rightarrow \TF $}{
+  \\[-0.7\baselineskip]
+    (\st,m_1) \sample  \adv_{\TF} \\
+    (G,X,T) \sample \G^3 \\
+    x \sample \ZZ_q \\
+    y \gets H(f(X) \Vert m_1) \\
+    t \gets x + y \\
+    \L:= \{(G,1,0),(X,0,1),(T,y,1) \} \\
+    i_0 \sample \sampleqg; i \gets 1 \\
+    (X^*,m_2) \sample \adv_{\TF}^{\Goracle}(\st,G,T, (X,m_1)) \\
+    \pcif X^* = \tilde{X}  \\
+    \t \pccomment{$\implies X^* + H(P \Vert m_2)G = T$} \\
+    \t \pccomment{$\implies H(P \Vert m_2) = h$} \\
+    \t \pcreturn m^* \\
+    \pcelse \pcreturn \bot
+    }
+    \pchspace
+    \procedure{Simulate $\Goracle(G_1,G_2)$}{
+    \\[-0.7\baselineskip]
+      (a_1,b_1) \gets \L[G_1]; (a_1,b_1) \gets \L[G_2] \\
+      (a_3,b_3) \gets (a_1 - a_2, b_1 - b_2) \\
+      \pcif \check{x} \\
+      \t \textbf{abort} \\
+      \pcelse \pcif i_0 = i  \\
+      \t h \gets t - (a_3 + b_3x) \\
+      \begin{subprocedure}
+        \t \dbox{ \procedure{}{
+            \< \sendmessageright*{h} \< Challenger \\
+            \< \sendmessageleft*{P} \<
+          }}
+      \end{subprocedure} \\
+      \t \tilde{X} \gets f^{-1}(P); G_3 := \tilde{X} \\
+      \pcelse G_3 \sample \G \\
+      \L := \L \cup \{(G_3,a_3,b_3)\} \\
+      i \gets i + 1 \\
+      \pcreturn G_3
+     }
+  \end{pchstack}
+  \end{mdframed}
+
+\begin{block}{MuSig with Covert Taproot}
+
+\textbf{Can an adversary come up with a covert Taproot spend by choosing their $\MuSig$ public key maliciously?} Call this the \emph{MuSig Covert Taproot} (\MCT) problem.
+
+\begin{mdframed}
+  \begin{pchstack}[center]
+      \procedure{\MCT}{
+      \\[-0.7\baselineskip]
+        X_1 \sample \G \\
+        (X_2, (C, m)) \sample \adv(X_1) \\
+        X \gets \MuSig(X_1,X_2) \\
+        \pcreturn  X =  C + H(f(C) \Vert m)G \\
+      }
+      \pchspace
+      \procedure{$\MuSig(X_1,X_2)$}{
+      \\[-0.7\baselineskip]
+        L := (X_1, X_2) \\
+        c_1 \gets \Hagg(L, X_1) \\
+        c_2 \gets \Hagg(L, X_2) \\
+        \pcreturn c_1X_1 + c_2X_2
+      }
+  \end{pchstack}
+\end{mdframed}
+$\rpp$ is sufficient to ensure $\MCT$ is hard if $X_2$ is queried before $C$. If the reduction guesses correctly which queries will be used for $X_2$ and $C$ it solves $\rpp$. This approach only works for 2-party MuSig.
+\begin{mdframed}
+\begin{pchstack}[center]
+  \procedure{$\R: \rpp \rightarrow  \MCT $}{
+  \\[-0.7\baselineskip]
+    x_1 \sample \ZZ_q; (G,X_1) \sample \G^2 \\
+    (i_0,i_1) \sample \sampleqg \textbf{ s.t. } i_0 < i_1 \\
+    \L := \{(G,1,0),(X_1,0,1)\} \\
+    (X_2, (C, m)) \sample \adv^{\Goracle}_{\rpp}(G, X_1) \\
+    \pcif X_2 = \tilde{X_2} \land C = \tilde{C} \\
+    \t \pccomment{$\implies \MuSig(X_1,X_2) = C + H(P \Vert m)G$} \\
+    \t \pccomment{$\implies H(P \Vert m) = h$} \\
+    \t \pcreturn m \\
+    \pcelse \\
+    \t \pcreturn \bot
+  }
+  \pchspace
+  \procedure{Simulate $\Goracle(G_1,G_2)$}{
+  \\[-0.7\baselineskip]
+    (a_1,b_1) \gets \L[G_1]; (a_2,b_2) \gets \L[G_2] \\
+    (a_3,b_3) \gets (a_1 - a_2,b_1 - b_3) \\
+    \pcif \check{x_1} \\
+    \t \textbf{abort} \\
+    \pcelse \pcif i = i_0  \\
+    \t \tilde{X_2} \sample \G; \tilde{x_2} \gets a_3 + b_3x_1; G_3 := \tilde{X_2} \\
+    \pcelse \pcif i = i_1 \\
+    \t L := (X_1, \tilde{X_2}) \\
+    \t x \gets \Hagg(L, X_1)x_1 + \Hagg(L, \tilde{X_2})\tilde{x_2} \\
+    \t h \gets x - (a_3 + b_3x_1) \\
+    \begin{subprocedure}
+    \t \dbox{ \procedure{}{
+          \< \sendmessageright*{h} \< Challenger \\
+          \< \sendmessageleft*{P} \<
+        }}
+    \end{subprocedure} \\
+    \t \tilde{C} \gets f^{-1}(P); G_3 := \tilde{C} \\
+    \pcelse G_3 \sample \G \\
+    \L := \L \cup \{(G_3,a_3,b_3)\} \\
+     i \gets i + 1 \\
+     \pcreturn G_3
+}
+\end{pchstack}
+
+\end{mdframed}
+If $C$ is queried before $X_2$, or $C = X_2$ then (I think) $\adv$ can be used to break Preimage Resistance.
+\end{block}
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End of the second column
+
+\begin{column}{\sepwid}\end{column} % Empty spacer column
+
+\begin{column}{\onecolwid}\vspace{-3cm}
+
+\begin{block}{MuSig Second Covert Taproot}
+\textbf{Can an adversary create a second malicious Taproot spend in addition to an agreed upon on one by choosing their parameters maliciously?} Call this the \emph{MuSig Second Covert Taproot} (\MCTTWO) problem. $\COPCR$ is necessary for $\MCTTWO$ to be hard:
+
+\begin{mdframed}
+\begin{pchstack}[center]
+       \procedure{\MCTTWO}{
+       \\[-0.7\baselineskip]
+         X_1 \sample \G \\
+        (X_2, m_1, (C, m_2)) \sample \adv(X_1) \\
+        X \gets \MuSig(X_1,X_2) \\
+        \com \gets X + H(f(X) \Vert m_2) \\
+        \pcreturn \com = C + H(f(C) \Vert m_2) \\
+        \t \t \t \t \land  m_2 \neq m_1 \\
+      }
+      \pchspace
+      \procedure{$\R(X_1) : \MCTTWO \rightarrow \COPCR$}{
+      \\[-0.7\baselineskip]
+        X_2 \sample \G \\
+        X \gets \MuSig(X_1,X_2); P_1 \gets f(X) \\
+        (\st,\delta) \sample \adv(P_1) \\
+        C \gets X - \delta{}G; P_2 \gets f(C) \\
+        (m_1,m_2) \gets \adv(\st,P_2) \\
+        \pcreturn (X_1,m_1,(C,m_2))
+      }
+\end{pchstack}
+\end{mdframed}
+
+$\COPCR$ is sufficient to make $\MCTTWO$ hard where the Taproot internal keys for are not the same i.e $X \neq C$. If the reduction guesses which queries will be used for $X$ and $C$ correctly (in any order) it solves $\COPCR$.
+
+\begin{mdframed}
+  \begin{pchstack}[center]
+  \procedure{$\R(P_1) : \COPCR \rightarrow \MCTTWO $}{
+  \\[-0.7\baselineskip]
+    D_1 \gets f^{-1}(P_1) \\
+    x_1 \sample \ZZ_q; (G,X_1) \sample \G^2 \\
+    (i_0,i_1) \sample \sampleqg \textbf{ s.t. } i_0 < i_1 \\
+    i \gets 1 \\
+    \L := \{(G,1,0),(X_1,0,1)\} \\
+    (X_2, m_1, (C,m_2)) \sample \adv_{\MCTTWO}^{\Goracle}(G,X_1) \\
+    X \gets \MuSig(X_1,X_2) \\
+    \pcif X = D_1 \land C = D_2 \\
+    \t \pccomment{$X + H(P_1 \Vert m_1)G = C + H(P_2 \Vert m_2)G$} \\
+    \t \pcreturn (m_1,m_2) \\
+    \pcelse \pcif X = D_2 \land C = D_1 \\
+    \t \pccomment{$X + H(P_2 \Vert m_1)G = C + H(P_1 \Vert m_2)G$} \\
+    \t \pcreturn (m_2,m_1) \\
+    \pcelse \pcreturn \bot \\
+  }
+  \pchspace
+  \procedure{Simulate $\Goracle(G_1,G_2)$}{
+    \\[-0.7\baselineskip]
+    (a_1,b_1) \gets \L[G_1]; (a_2,b_2) \gets \L[G_2] \\
+    (a_3,b_3) \gets (a_1 - a_2, b_1 - b_2) \\
+    \pcif \check{x_1}  \\
+    \t \textbf{abort} \\
+    \pcelse \pcif i = i_0 \\
+    \t d_1 \gets a_3 + b_3x_1  \\
+    \t G_3 := D_1 \\
+    \pcelse \pcif i = i_1 \\
+    \t d_2 \gets a_3 + b_3x_1\\
+    \t \delta \gets d_1 - d_2 \\
+    \begin{subprocedure}
+        \t \dbox{ \procedure{}{
+            \< \sendmessageright*{\delta} \< Challenger \\
+            \< \sendmessageleft*{P_2} \<
+          }}
+      \end{subprocedure} \\
+    \t D_2 \gets f^{-1}(P_2); G_3 := D_2 \\
+    \pcelse G_3 \sample \G \\
+    \L := \L \cup \{(G_3, a_3)\} \\
+    i \gets i + 1 \\
+    \pcreturn G_3
+  }
+\end{pchstack}
+\end{mdframed}
+
+If $X = C$, then $\adv$ clearly breaks collision resistance.
+
+\end{block}
+
+\begin{block}{Remarks}
+\begin{itemize}
+    \item These reductions are incomplete -- they do not account for $\adv$ choosing $G$ or $X_1$ etc as one of the elements they return. They can be modified to fix this.
+    \item To actually steal coins, the malicious Taproot openings have to be valid Merkle Root ($m$ can't be arbitrary).
+    \item If coin tossing is used to generate joint key instead of MuSig then security in all scenarios follows from $\rpp$.
+\end{itemize}
+
+
+
+\small{
+                     \bibliographystyle{ieeetr}
+                     \bibliography{bib_short.bib}
+                     }
+\end{block}
+
+
+\end{column} % End of the third column
+\end{columns}
+
+
+\end{column}
+
+\end{columns} % End of all the columns in the poster
+
+\end{frame} % End of the enclosing frame
+
+\end{document}
