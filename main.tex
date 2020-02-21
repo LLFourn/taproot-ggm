@@ -363,7 +363,7 @@ If $C$ is queried before $X_2$, or $C = X_2$ then (I think) $\adv$ can be used t
          X_1 \sample \G \\
         (X_2, m_1, (C, m_2)) \sample \adv(X_1) \\
         X \gets \MuSig(X_1,X_2) \\
-        \com \gets X + H(f(X) \Vert m_2) \\
+        \com \gets X + H(f(X) \Vert m_1) \\
         \pcreturn \com = C + H(f(C) \Vert m_2) \\
         \t \t \t \t \land  m_2 \neq m_1 \\
       }
